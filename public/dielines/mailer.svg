@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 520">
+  <title>Mailer dieline</title>
+  <g id="bleed" stroke="#f97316" stroke-width="1.5" stroke-dasharray="12 8" fill="none">
+    <path d="M40 40h740v440H40z" />
+  </g>
+  <g id="cut" stroke="#0f172a" stroke-width="2.5" fill="none">
+    <path d="M100 120h620v280H100z" />
+    <path d="M220 120V60h380v60" />
+    <path d="M220 400v60h380v-60" />
+    <path d="M100 220H40v80h60" />
+    <path d="M720 220h60v80h-60" />
+  </g>
+  <g id="safe" stroke="#10b981" stroke-width="1.5" stroke-dasharray="10 6" fill="none">
+    <path d="M160 180h500v160H160z" />
+  </g>
+</svg>
