@@ -246,6 +246,119 @@ npm run dev
 
 ---
 
+## Understanding the Dependencies: React 19, Next.js, and Konva
+
+### What is React 19?
+
+**React** is a JavaScript library for building user interfaces, particularly web applications. It allows developers to create interactive UIs using a component-based architecture.
+
+**React 19** is the latest major version with new features including:
+- Better server-side rendering support
+- Improved performance with automatic batching
+- Enhanced hooks and state management
+- Better TypeScript support
+
+**In this CloudLabs application, React 19 is used for:**
+- **Component-based UI**: The entire interface is built with React components (toolbars, panels, buttons, modals)
+- **State Management**: React hooks (`useState`, `useEffect`, `useCallback`, `useMemo`) manage component state
+- **Interactive UI**: All user interactions (clicking, dragging, typing) are handled by React components
+- **Example**: The `PersonalizePage` component (`app/personalize/page.tsx`) uses React to compose the layout with `<TopBar />`, `<LeftToolbar />`, `<ClientCanvas />`, `<RightPanel3D />`, and `<PropertiesPanel />` components
+
+---
+
+### What is Next.js?
+
+**Next.js** is a React framework that provides additional features on top of React, such as:
+- **Server-side rendering (SSR)**: Pages can be pre-rendered on the server for better performance
+- **File-based routing**: Create routes by organizing files in the `app/` directory
+- **Built-in optimizations**: Automatic code splitting, image optimization, and performance enhancements
+- **API routes**: Can create backend API endpoints within the same project
+
+**In this CloudLabs application, Next.js is used for:**
+- **App Router**: The `app/` directory structure defines routes (`/personalize` page)
+- **Routing**: The root route (`/`) automatically redirects to `/personalize` (see `app/page.tsx`)
+- **Layout Management**: `app/layout.tsx` defines the global HTML structure and metadata
+- **Development Server**: `npm run dev` starts Next.js's built-in development server
+- **Production Builds**: `npm run build` creates an optimized production version
+- **Client/Server Components**: Next.js handles rendering strategy - client components use `"use client"` directive (like `CanvasStage.tsx`) for browser-only features
+
+**Example**: The file structure `app/personalize/page.tsx` automatically creates the route `http://localhost:3000/personalize`
+
+---
+
+### What is Konva?
+
+**Konva** is a 2D canvas library for JavaScript that provides a high-performance way to draw graphics on HTML5 Canvas elements. It offers:
+- **Shape primitives**: Rectangles, circles, lines, paths, images, text
+- **Event handling**: Mouse, touch, and keyboard interactions
+- **Transformations**: Scaling, rotation, skewing of shapes
+- **Layering**: Organize shapes into layers for better performance
+- **Animation**: Built-in animation support
+
+**react-konva** is a React wrapper that lets you use Konva with React's declarative syntax.
+
+**In this CloudLabs application, Konva is used for:**
+- **2D Canvas Editor**: The main editing surface where users place and manipulate design elements
+- **Drawing Shapes**: Drawing dielines (box layouts), shapes, images, PDFs, and text on the canvas
+- **Interactive Editing**: 
+  - Dragging elements around the canvas
+  - Selecting elements with click/tap
+  - Transforming elements (resize, rotate) using the Transformer component
+  - Zooming and panning the canvas
+- **Layer Management**: Organizing the canvas into layers (background, dieline, grid, artwork layers)
+- **Visual Feedback**: Showing selection handles, grid snap guides, and hover effects
+
+**Key Components Used:**
+- `<Stage>`: The main canvas container (see `CanvasStage.tsx` line 1883)
+- `<Layer>`: Organizes shapes into render layers for performance
+- `<Rect>`, `<Path>`, `<Image>`, `<Text>`: Draw different types of elements
+- `<Transformer>`: Provides resize/rotate handles when elements are selected
+- `<Group>`: Groups multiple shapes together
+
+**Example**: In `components/CanvasStage.tsx`, Konva components are used to render:
+```tsx
+<Stage>
+  <Layer> {/* Background layer */}
+    <Rect fill="#f8fafc" />
+  </Layer>
+  <Layer> {/* Dieline layer */}
+    <Path data={dieline.path} stroke="black" />
+  </Layer>
+  <Layer> {/* Artwork layer */}
+    <Image image={uploadedImage} draggable />
+    <Text text="Hello" />
+  </Layer>
+</Stage>
+```
+
+---
+
+### How They Work Together in CloudLabs
+
+1. **Next.js** provides the application structure and routing
+   - Handles navigation to `/personalize`
+   - Manages the overall page layout
+
+2. **React 19** builds the UI components
+   - Creates the toolbar, panels, buttons, and modals
+   - Manages component state and user interactions
+   - Handles the overall application state using Zustand store
+
+3. **Konva** provides the 2D canvas editing surface
+   - Renders the interactive design canvas
+   - Handles drawing, dragging, and transforming design elements
+   - Synchronizes with React state to update the UI when canvas changes
+
+**Data Flow Example:**
+- User drags an image on the Konva canvas
+- Konva fires an `onDragEnd` event
+- React handler updates the Zustand store with new position
+- React re-renders components that depend on that state
+- Properties panel shows updated coordinates
+- 3D preview (Three.js) updates to show the change
+
+---
+
 ## Additional Information
 
 - **Development Server:** Runs on `http://localhost:3000` by default
